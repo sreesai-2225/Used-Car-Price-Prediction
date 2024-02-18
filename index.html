@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Prediction</title>
+    <style>
+        body {
+            background-color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        form {
+            background-color: rgb(18, 0, 29);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        h2 {
+            color: rgb(244, 239, 239);
+            font-family: 'Times New Roman', Times, serif;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color:white;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+        }
+        button {
+            background-color: rgb(121, 158, 158);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: rgb(14, 146, 146);
+        }
+        #result {
+            margin-top: 20px;
+            color: white; /* Set text color to white */
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="carForm" action="/predict" method="post" onsubmit="return validateForm()">
+            <h2><b>Car Price Prediction</b></h2>
+            <label for="Year"><b>Year</b></label>
+            <input id="Year" name="Year" type="number" required min="1950" max="2024">
+
+            <label for="Kilometers_Driven"><b>Kilometers Driven</b></label>
+            <input id="Kilometers_Driven" name="Kilometers_Driven" type="number" required min="100" max="2000000">
+
+            <label for="Mileage"><b>Mileage (km/liter)</b></label>
+            <input id="Mileage" name="Mileage" type="number" step="0.01" required min="8" max="40">
+
+            <label for="Power"><b>Power (bhp)</b></label>
+            <input id="Power" name="Power" type="number" required min="40" max="1500">
+
+            <label for="Engine"><b>Engine Capacity (cc)</b></label>
+            <input id="Engine" name="Engine" type="number" required min="600" max="7000">
+
+            <label for="Seats"><b>Number of Seats</b></label>
+            <input id="Seats" name="Seats" type="number" required min="4" max="9">
+
+            <label for="Owner_Type"><b>Owner Type</b></label>
+            <select id="Owner_Type" name="Owner_Type" required>
+                <option value="First Owner">First Owner</option>
+                <option value="Second Owner">Second Owner</option>
+                <option value="Third Owner">Third Owner</option>
+                <option value="Fourth & Above Owner">Fourth & Above Owner</option>
+            </select>
+
+            <label for="Fuel_Type"><b>Fuel Type</b></label>
+            <select id="Fuel_Type" name="Fuel_Type" required>
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="CNG">CNG</option>
+                <option value="LPG">LPG</option>
+                <option value="Electric">Electric</option> 
+            </select>
+
+            <label for="Transmission"><b>Transmission Type</b></label>
+                <select id="Transmission" name="Transmission_Manual" required> 
+                <option value="Manual">Manual</option>
+                <option value="Automatic">Automatic</option>
+            </select>
+
+
+            <button type="submit"><b>Predict Car Price</b></button>
+        </form>
+
+        <div id="result">
+            {% if prediction_text %}
+                <h3>{{ prediction_text }}</h3>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        function validateForm() {
+            var year = parseInt(document.getElementById('Year').value); 
+            if (year < 1950 || year > 2024 || isNaN(year)) { 
+                alert("Please provide a valid year between 1950 and 2024.");
+                return false;
+            }
+
+            var kilometersDriven = parseInt(document.getElementById('Kilometers_Driven').value);
+            if (kilometersDriven < 100 || kilometersDriven > 2000000 || isNaN(kilometersDriven)) {
+                alert("Please provide a valid value for kilometers driven between 100 and 2000000.");
+                return false;
+            }
+
+            var mileage = parseFloat(document.getElementById('Mileage').value); 
+            if (mileage < 6 || mileage > 40 || isNaN(mileage)) { 
+                alert("Please provide a valid mileage between 6 and 40.");
+                return false;
+            }
+
+            var power = parseFloat(document.getElementById('Power').value); 
+            if (power < 40 || power > 1500 || isNaN(power)) { 
+                alert("Please provide a valid power between 40 and 1500.");
+                return false;
+            }
+
+            var engine = parseFloat(document.getElementById('Engine').value); 
+            if (engine < 600 || engine > 7000 || isNaN(engine)) { 
+                alert("Please provide a valid engine capacity between 600 and 7000.");
+                return false;
+            }
+
+            var seats = parseInt(document.getElementById('Seats').value); 
+            if (seats < 4 || seats > 9 || isNaN(seats)) { 
+                alert("Please provide a valid number of seats between 4 and 9.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
